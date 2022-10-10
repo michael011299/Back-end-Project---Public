@@ -2,7 +2,6 @@ const request = require("supertest");
 const app = require("../app");
 const db = require("../db/connection");
 const testData = require("../db/data/test-data/index");
-const reviews = require("../db/data/test-data/reviews");
 const seed = require("../db/seeds/seed");
 
 beforeEach(() => {
@@ -44,24 +43,22 @@ describe("GET /api/categories", () => {
 
 describe("GET /api/review/:reviewid", () => {
   test("status:200, responds with a single review based on a given id", () => {
+    const review_id = 1;
     return request(app)
-      .get("/api/review/:reviewid")
+      .get(`/api/review/${review_id}`)
       .expect(200)
-      .then(({ body }) => {
-        const { review } = body;
-        expect(review).toEqual(
-          expect.objectContaining({
-            review_id: expect.any(Number),
-            title: expect.any(String),
-            review_body: expect.any(String),
-            designer: expect.any(String),
-            review_img_url: expect.any(String),
-            votes: expect.any(Number),
-            category: expect.any(String),
-            owner: expect.any(String),
-            created_at: expect.any(String),
-          })
-        );
+      .then((body) => {
+        expect(body.body).toEqual({
+          review_id: expect.any(Number),
+          title: expect.any(String),
+          category: expect.any(String),
+          designer: expect.any(String),
+          owner: expect.any(String),
+          review_body: expect.any(String),
+          review_img_url: expect.any(String),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
       });
   });
   test("status:404, responds with an error message when passed a url that does not exist", () => {
@@ -73,9 +70,3 @@ describe("GET /api/review/:reviewid", () => {
       });
   });
 });
-
-// a review object, which should have the following properties:
-
-// review_id which is the primary key
-// category field which references the slug in the categories table
-// owner field that references a user's primary key (username)
