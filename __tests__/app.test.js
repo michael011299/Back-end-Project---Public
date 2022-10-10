@@ -93,9 +93,8 @@ describe("GET /api/users", () => {
   test("status:404, responds with an error message when passed a url that does not exist", () => {
     return request(app)
       .get("/api/ussers")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Route not found");
+      .then((res) => {
+        expect(res.status).toBe(404);
       });
   });
 });
