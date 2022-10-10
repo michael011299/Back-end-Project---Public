@@ -61,9 +61,9 @@ describe("GET /api/review/:reviewid", () => {
         });
       });
   });
-  test("status:404, responds with an error message when passed a url that does not exist", () => {
+  test("status:404, responds with an error message when passed an invalid id", () => {
     return request(app)
-      .get("/api/categoriees")
+      .get("/api/review/460")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Route not found");
