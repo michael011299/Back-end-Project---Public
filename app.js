@@ -1,9 +1,10 @@
 const express = require("express");
 const { getCategories } = require("./Controllers/getCategories.controller");
+const { getUsers } = require("./Controllers/getUsers.controllers");
 const app = express();
-app.use(express.json());
 
 app.get("/api/categories", getCategories);
+app.get("/api/users", getUsers);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
