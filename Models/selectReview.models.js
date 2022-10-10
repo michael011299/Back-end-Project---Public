@@ -4,10 +4,14 @@ const db = require("../db/connection");
 exports.selectReview = (reviewID) => {
   return db
     .query("SELECT * FROM reviews WHERE review_id = $1", [reviewID.review_id])
-    .then((result) => {
-      return result.rows[0];
-    })
-    .catch((err) => {
-      console.log(err, "err in the model");
+    .then(({ rows }) => {
+      const result = rows[0];
+      if (!result) {
+        return Promise.reject({
+          status: 404,
+          msg: `No user found for review_id: ${reviewID.review_id}`,
+        });
+      }
+      return result;
     });
 };

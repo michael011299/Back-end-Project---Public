@@ -12,6 +12,8 @@ afterAll(() => {
   if (db.end) db.end();
 });
 
+/// Categories
+
 describe("GET /api/categories", () => {
   test("status:200, responds with an array of categories", () => {
     return request(app)
@@ -33,13 +35,15 @@ describe("GET /api/categories", () => {
   });
   test("status:404, responds with an error message when passed a url that does not exist", () => {
     return request(app)
-      .get("/api/categoriees")
+      .get("/api/categoriess")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Route not found");
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });
+
+/// Reviews
 
 describe("GET /api/review/:reviewid", () => {
   test("status:200, responds with a single review based on a given id", () => {
@@ -61,12 +65,12 @@ describe("GET /api/review/:reviewid", () => {
         });
       });
   });
-  test("status:404, responds with an error message when passed an invalid id", () => {
+  test("status:400, responds with an error message when passed a bad user ID", () => {
     return request(app)
-      .get("/api/review/460")
-      .expect(404)
+      .get("/api/review/notanid")
+      .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Route not found");
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
