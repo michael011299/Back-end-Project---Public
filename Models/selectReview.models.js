@@ -8,6 +8,6 @@ exports.selectReview = (reviewID) => {
       return result.rows[0];
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err, "err in the model");
     });
 };
