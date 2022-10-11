@@ -13,6 +13,13 @@ exports.editReview = (reviewData) => {
       [reviewUpdate, reviewID]
     )
     .then((result) => {
-      return result.rows[0];
+      const updatedData = result.rows[0];
+      if (!updatedData) {
+        return Promise.reject({
+          status: 404,
+          msg: `No user found for review_id: ${reviewID.review_id}`,
+        });
+      }
+      return updatedData;
     });
 };
