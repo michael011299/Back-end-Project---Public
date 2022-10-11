@@ -1,6 +1,7 @@
 const express = require("express");
 const { getCategories } = require("./Controllers/getCategories.controller");
-const { getReview } = require("./Controllers/getReview.controller");
+const { getReviewById } = require("./Controllers/getReviewById.controller");
+const { getReviews } = require("./Controllers/getReviews.controller");
 const { getUsers } = require("./Controllers/getUsers.controllers");
 const { patchReviews } = require("./Controllers/patchReview.controller");
 const {
@@ -12,9 +13,10 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
-app.get("/api/review/:review_id", getReview);
+app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/users", getUsers);
-app.patch("/api/review/:review_id", patchReviews);
+app.patch("/api/reviews/:review_id", patchReviews);
+app.get("/api/reviews", getReviews);
 
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
