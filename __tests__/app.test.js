@@ -57,6 +57,7 @@ describe("GET /api/review/:reviewid", () => {
           review_img_url: expect.any(String),
           votes: expect.any(Number),
           created_at: expect.any(String),
+          comment_count: expect.any(String),
         });
       });
   });
@@ -165,13 +166,21 @@ describe("PATCH api/reviews/:review_id", () => {
   });
 });
 
-describe("GET /api/reviews/:review_id?comment_count", () => {
+describe("GET /api/reviews/:review_id (comment_count)", () => {
   test("should return a count with the number of reviews given by a specified ID", () => {
     return request(app)
-      .get("/api/reviews/2?comment_count")
+      .get("/api/review/3")
       .expect(200)
       .then((res) => {
-        expect(res.body).toEqual({ comment_count: 3 });
+        expect(res.body.comment_count).toEqual("3");
+      });
+  });
+  test("status:400, responds with an error message when passed a bad user ID", () => {
+    return request(app)
+      .get("/api/review/notanid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
