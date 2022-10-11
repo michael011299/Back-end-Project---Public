@@ -1,9 +1,7 @@
 const db = require("../db/connection");
 const patchReviews = require("../Controllers/patchReview.controller");
 
-exports.editReview = (reviewData) => {
-  const reviewID = reviewData.params.review_id;
-  const reviewUpdate = reviewData.body.inc_votes;
+exports.editReview = (reviewID, reviewUpdate) => {
   return db
     .query(
       `UPDATE reviews 
@@ -17,7 +15,7 @@ exports.editReview = (reviewData) => {
       if (!updatedData) {
         return Promise.reject({
           status: 404,
-          msg: `No user found for review_id: ${reviewID.review_id}`,
+          msg: `No user found for review_id: ${reviewID}`,
         });
       }
       return updatedData;

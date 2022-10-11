@@ -107,7 +107,6 @@ describe("PATCH api/reviews/:review_id", () => {
       .send(reviewUpdate)
       .expect(200)
       .then((res) => {
-        console.log(res.body);
         expect(res.body).toEqual({
           review_id: 1,
           title: "Agricola",
@@ -142,6 +141,16 @@ describe("PATCH api/reviews/:review_id", () => {
           created_at: "1970-01-10T02:08:38.400Z",
           votes: 6,
         });
+      });
+  });
+  test("should return an unchanged item when passed an invalid or no vote value", () => {
+    const reviewUpdate = { inc_votes: "hello" };
+    return request(app)
+      .patch(`/api/review/13`)
+      .send(reviewUpdate)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid input");
       });
   });
   test("should return an error message when given an invalid ID", () => {
