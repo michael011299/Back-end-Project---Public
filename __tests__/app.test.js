@@ -103,10 +103,12 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should update a increase the vote count by the value passed in", () => {
     const reviewUpdate = { inc_votes: 1 };
     return request(app)
-      .patch(`/api/reviews/1`)
+      .patch(`/api/review/1`)
       .send(reviewUpdate)
+      .expect(200)
       .then((res) => {
-        expect(res).toEqual({
+        console.log(res.body);
+        expect(res.body).toEqual({
           review_id: 1,
           title: "Agricola",
           designer: "Uwe Rosenberg",
@@ -115,7 +117,7 @@ describe("PATCH api/reviews/:review_id", () => {
             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
           review_body: "Farmyard fun!",
           category: "euro game",
-          created_at: new Date(1610964020514),
+          created_at: "2021-01-18T10:00:20.514Z",
           votes: 2,
         });
       });
@@ -123,10 +125,11 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should decrease the vote count by the value given", () => {
     const reviewUpdate = { inc_votes: -10 };
     return request(app)
-      .patch(`/api/reviews/13`)
+      .patch(`/api/review/13`)
       .send(reviewUpdate)
+      .expect(200)
       .then((res) => {
-        expect(res).toEqual({
+        expect(res.body).toEqual({
           review_id: 13,
           title: "Settlers of Catan: Don't Settle For Less",
           designer: "Klaus Teuber",
@@ -136,8 +139,8 @@ describe("PATCH api/reviews/:review_id", () => {
           review_body:
             "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
           category: "social deduction",
-          created_at: new Date(788918400),
-          votes: 10,
+          created_at: "1970-01-10T02:08:38.400Z",
+          votes: 6,
         });
       });
   });

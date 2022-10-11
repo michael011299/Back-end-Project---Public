@@ -1,4 +1,3 @@
-const { getCategories } = require("../Controllers/getCategories.controller");
 const db = require("../db/connection");
 
 exports.selectCategories = () => {
