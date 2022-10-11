@@ -98,3 +98,57 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("PATCH api/reviews/:review_id", () => {
+  test("should update a increase the vote count by the value passed in", () => {
+    const reviewUpdate = { inc_votes: 1 };
+    return request(app)
+      .patch(`/api/reviews/1`)
+      .send(reviewUpdate)
+      .then((res) => {
+        expect(res).toEqual({
+          review_id: 1,
+          title: "Agricola",
+          designer: "Uwe Rosenberg",
+          owner: "mallionaire",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          review_body: "Farmyard fun!",
+          category: "euro game",
+          created_at: new Date(1610964020514),
+          votes: 2,
+        });
+      });
+  });
+  test("should decrease the vote count by the value given", () => {
+    const reviewUpdate = { inc_votes: -10 };
+    return request(app)
+      .patch(`/api/reviews/13`)
+      .send(reviewUpdate)
+      .then((res) => {
+        expect(res).toEqual({
+          review_id: 13,
+          title: "Settlers of Catan: Don't Settle For Less",
+          designer: "Klaus Teuber",
+          owner: "mallionaire",
+          review_img_url:
+            "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+          review_body:
+            "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+          category: "social deduction",
+          created_at: new Date(788918400),
+          votes: 10,
+        });
+      });
+  });
+  test("should return an error message when given an invalid ID", () => {
+    const reviewUpdate = { inc_votes: -10 };
+    return request(app)
+      .patch("/api/review/notanid")
+      .send(reviewUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+});
