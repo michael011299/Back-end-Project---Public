@@ -164,3 +164,14 @@ describe("PATCH api/reviews/:review_id", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id?comment_count", () => {
+  test("should return a count with the number of reviews given by a specified ID", () => {
+    return request(app)
+      .get("/api/reviews/2?comment_count")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toEqual({ comment_count: 3 });
+      });
+  });
+});
