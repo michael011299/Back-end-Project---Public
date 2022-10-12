@@ -1,7 +1,7 @@
+const { query } = require("express");
 const db = require("../db/connection");
 
-exports.selectReviews = () => {
-  //   if (query) {
+exports.selectReviews = (queryCategory) => {
   return db
     .query(
       `SELECT reviews.*,
@@ -14,27 +14,23 @@ exports.selectReviews = () => {
     )
     .then((result) => {
       const results = result.rows;
-      if (!results) {
-        return Promise.reject({
-          status: 404,
-          msg: `No results found`,
+      if (Object.keys(queryCategory).length === 0) {
+        return results;
+      }
+      let values;
+      if (Object.keys(queryCategory).length > 0) {
+        values = result.rows.filter((row) => {
+          if (row.category === queryCategory.category) {
+            return row;
+          }
         });
       }
-      return results;
+      if (values.length === 0) {
+        return Promise.reject({
+          status: 400,
+          msg: `Invalid input`,
+        });
+      }
+      return values;
     });
-  //   } else {
-  //     db.query(`SELECT reviews.*,
-  //     COUNT(comments.review_id) AS comment_count
-  //     FROM reviews
-  //     LEFT JOIN comments ON comments.review_id = reviews.review_id
-  //     WHERE category = $1
-  //     GROUP BY reviews.review_id
-  //     ORDER BY created_at DESC;
-  //     `, query)
-  //     /// filter by category
-  //   }
 };
-
-// Queries
-// The end point should also accept the following query:
-// - category, which filters the reviews by the category value specified in the query. If the query is omitted the endpoint should respond with all reviews.

@@ -184,6 +184,7 @@ describe("GET /api/reviews/:review_id (comment_count)", () => {
       });
   });
 });
+
 describe("GET /api/reviews", () => {
   test("should return an array of all review objects ", () => {
     return request(app)
@@ -210,6 +211,62 @@ describe("GET /api/reviews", () => {
             })
           );
         });
+      });
+  });
+  test("should return a single specific item from a provided query category", () => {
+    return request(app)
+      .get("/api/reviews?category=dexterity")
+      .expect(200)
+      .then(({ body }) => {
+        const reviews = body;
+        expect(reviews[0]).toEqual({
+          title: "Jenga",
+          designer: "Leslie Scott",
+          owner: "philippaclaire9",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          review_body: "Fiddly fun for all the family",
+          review_id: 2,
+          category: "dexterity",
+          created_at: "2021-01-18T10:01:41.251Z",
+          votes: 5,
+          comment_count: "3",
+        });
+      });
+  });
+  test("should return a specific category of items depending on the query provided", () => {
+    return request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200)
+      .then(({ body }) => {
+        const reviews = body;
+        expect(reviews).toBeInstanceOf(Array);
+        expect(reviews).toHaveLength(11);
+        reviews.forEach((review) => {
+          expect(review.category).toEqual("social deduction");
+          expect(review).toEqual(
+            expect.objectContaining({
+              review_id: expect.any(Number),
+              title: expect.any(String),
+              category: expect.any(String),
+              designer: expect.any(String),
+              owner: expect.any(String),
+              review_body: expect.any(String),
+              review_img_url: expect.any(String),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              comment_count: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("status:400, responds with an error message when passed a bad request", () => {
+    return request(app)
+      .get("/api/reviews?category=bananas")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
