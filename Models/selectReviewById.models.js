@@ -1,7 +1,6 @@
-const { getReview } = require("../Controllers/getReview.controller");
 const db = require("../db/connection");
 
-exports.selectReview = (reviewID) => {
+exports.selectReviewById = (reviewID) => {
   return db
     .query(
       `SELECT reviews.*,

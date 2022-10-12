@@ -40,11 +40,11 @@ describe("GET /api/categories", () => {
   });
 });
 
-describe("GET /api/review/:reviewid", () => {
+describe("GET /api/reviews/:reviewid", () => {
   test("status:200, responds with a single review based on a given id", () => {
     const review_id = 1;
     return request(app)
-      .get(`/api/review/${review_id}`)
+      .get(`/api/reviews/${review_id}`)
       .expect(200)
       .then((body) => {
         expect(body.body).toEqual({
@@ -63,7 +63,7 @@ describe("GET /api/review/:reviewid", () => {
   });
   test("status:400, responds with an error message when passed a bad user ID", () => {
     return request(app)
-      .get("/api/review/notanid")
+      .get("/api/reviews/notanid")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
@@ -104,7 +104,7 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should update a increase the vote count by the value passed in", () => {
     const reviewUpdate = { inc_votes: 1 };
     return request(app)
-      .patch(`/api/review/1`)
+      .patch(`/api/reviews/1`)
       .send(reviewUpdate)
       .expect(200)
       .then((res) => {
@@ -125,7 +125,7 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should decrease the vote count by the value given", () => {
     const reviewUpdate = { inc_votes: -10 };
     return request(app)
-      .patch(`/api/review/13`)
+      .patch(`/api/reviews/13`)
       .send(reviewUpdate)
       .expect(200)
       .then((res) => {
@@ -147,7 +147,7 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should return an unchanged item when passed an invalid or no vote value", () => {
     const reviewUpdate = { inc_votes: "hello" };
     return request(app)
-      .patch(`/api/review/13`)
+      .patch(`/api/reviews/13`)
       .send(reviewUpdate)
       .expect(400)
       .then((res) => {
@@ -157,7 +157,7 @@ describe("PATCH api/reviews/:review_id", () => {
   test("should return an error message when given an invalid ID", () => {
     const reviewUpdate = { inc_votes: -10 };
     return request(app)
-      .patch("/api/review/notanid")
+      .patch("/api/reviews/notanid")
       .send(reviewUpdate)
       .expect(400)
       .then(({ body }) => {
@@ -169,7 +169,7 @@ describe("PATCH api/reviews/:review_id", () => {
 describe("GET /api/reviews/:review_id (comment_count)", () => {
   test("should return a count with the number of reviews given by a specified ID", () => {
     return request(app)
-      .get("/api/review/3")
+      .get("/api/reviews/3")
       .expect(200)
       .then((res) => {
         expect(res.body.comment_count).toEqual("3");
@@ -177,7 +177,93 @@ describe("GET /api/reviews/:review_id (comment_count)", () => {
   });
   test("status:400, responds with an error message when passed a bad user ID", () => {
     return request(app)
-      .get("/api/review/notanid")
+      .get("/api/reviews/notanid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+});
+
+describe("GET /api/reviews", () => {
+  test("should return an array of all review objects ", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const reviews = body;
+        expect(reviews).toBeInstanceOf(Array);
+        expect(reviews).toHaveLength(13);
+        expect(reviews).toBeSortedBy("created_at", { descending: true });
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              review_id: expect.any(Number),
+              title: expect.any(String),
+              category: expect.any(String),
+              designer: expect.any(String),
+              owner: expect.any(String),
+              review_body: expect.any(String),
+              review_img_url: expect.any(String),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              comment_count: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("should return a single specific item from a provided query category", () => {
+    return request(app)
+      .get("/api/reviews?category=dexterity")
+      .expect(200)
+      .then(({ body }) => {
+        const reviews = body;
+        expect(reviews[0]).toEqual({
+          title: "Jenga",
+          designer: "Leslie Scott",
+          owner: "philippaclaire9",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          review_body: "Fiddly fun for all the family",
+          review_id: 2,
+          category: "dexterity",
+          created_at: "2021-01-18T10:01:41.251Z",
+          votes: 5,
+          comment_count: "3",
+        });
+      });
+  });
+  test("should return a specific category of items depending on the query provided", () => {
+    return request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200)
+      .then(({ body }) => {
+        const reviews = body;
+        expect(reviews).toBeInstanceOf(Array);
+        expect(reviews).toHaveLength(11);
+        reviews.forEach((review) => {
+          expect(review.category).toEqual("social deduction");
+          expect(review).toEqual(
+            expect.objectContaining({
+              review_id: expect.any(Number),
+              title: expect.any(String),
+              category: expect.any(String),
+              designer: expect.any(String),
+              owner: expect.any(String),
+              review_body: expect.any(String),
+              review_img_url: expect.any(String),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              comment_count: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("status:400, responds with an error message when passed a bad request", () => {
+    return request(app)
+      .get("/api/reviews?category=bananas")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
