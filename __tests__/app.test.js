@@ -184,3 +184,20 @@ describe("GET /api/reviews/:review_id (comment_count)", () => {
       });
   });
 });
+
+// Responds with:
+
+// an array of comments for the given review_id of which each comment should have the following properties:
+// - comment_id
+// - votes
+// - created_at
+// - author which is the username from the users table
+// - body
+// - review_id
+// comments should be served with the most recent comments first
+
+describe(" GET /api/reviews/:review_id/comments", () => {
+  test("should return an array of comments for the given review_id", () => {
+    return re.get("/");
+  });
+});
