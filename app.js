@@ -4,6 +4,7 @@ const { getReviewById } = require("./Controllers/getReviewById.controller");
 const { getReviews } = require("./Controllers/getReviews.controller");
 const { getUsers } = require("./Controllers/getUsers.controllers");
 const { patchReviews } = require("./Controllers/patchReview.controller");
+const { getCommentsById } = require("./Controllers/getCommentsById.controller");
 const {
   handleCustomErrors,
   handlePsqlErrors,
@@ -17,6 +18,7 @@ app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/users", getUsers);
 app.patch("/api/reviews/:review_id", patchReviews);
 app.get("/api/reviews", getReviews);
+app.get("/api/reviews/:review_id/comments", getCommentsById);
 
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);

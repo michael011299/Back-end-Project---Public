@@ -42,9 +42,8 @@ describe("GET /api/categories", () => {
 
 describe("GET /api/reviews/:reviewid", () => {
   test("status:200, responds with a single review based on a given id", () => {
-    const review_id = 1;
     return request(app)
-      .get(`/api/reviews/${review_id}`)
+      .get(`/api/reviews/1`)
       .expect(200)
       .then((body) => {
         expect(body.body).toEqual({
@@ -271,19 +270,37 @@ describe("GET /api/reviews", () => {
   });
 });
 
-// Responds with:
-
-// an array of comments for the given review_id of which each comment should have the following properties:
-// - comment_id
-// - votes
-// - created_at
-// - author which is the username from the users table
-// - body
-// - review_id
-// comments should be served with the most recent comments first
-
 describe(" GET /api/reviews/:review_id/comments", () => {
   test("should return an array of comments for the given review_id", () => {
-    return re.get("/");
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(3);
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              review_id: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+  test("status:404, responds with an error message when passed a bad user ID", () => {
+    return request(app)
+      .get("/api/reviews/235/comments")
+      .expect(404)
+      .then(({ body }) => {
+        console.log(body);
+        expect(result.msg).toBe("Invalid input");
+      });
   });
 });
