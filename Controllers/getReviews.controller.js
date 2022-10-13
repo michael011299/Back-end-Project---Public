@@ -1,4 +1,4 @@
-const { selectReviews } = require("../Models/selectReviews.controller");
+const { selectReviews } = require("../Models/selectReviews.models");
 
 exports.getReviews = (req, res, next) => {
   const queryCategory = req.query.category;

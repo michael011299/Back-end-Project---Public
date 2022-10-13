@@ -263,10 +263,45 @@ describe("GET /api/reviews", () => {
   test("status:400, responds with an error message when passed a bad request", () => {
     return request(app)
       .get("/api/reviews?category=bananas")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
       });
+  });
+  describe("GET /api/reviews - sorting", () => {
+    test("should return reviews sorted to default of date and descending", () => {
+      return request(app)
+        .get("/api/reviews")
+        .then(({ body }) => {
+          const reviews = body;
+          expect(reviews).toBeSortedBy("created_at", { descending: true });
+        });
+    });
+    test("should return reviews sorted to given parameters", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=owner&order_by=ASC")
+        .expect(200)
+        .then(({ body }) => {
+          const reviews = body;
+          expect(reviews).toBeSortedBy("owner", { ascending: true });
+        });
+    });
+    test("should return an error when given a sort_by parameter that does not exist", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=owr&order_by=ASC")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toEqual("Invalid input");
+        });
+    });
+    test("should return an error when given a order_by parameter that does not exist", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=owner&order_by=AFC")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toEqual("Invalid input");
+        });
+    });
   });
 });
 
@@ -387,38 +422,4 @@ describe("POST /api/reviews/:review_id/comments", () => {
   });
 });
 
-describe("GET /api/reviews - sorting", () => {
-  test("should return reviews sorted to default of date and descending", () => {
-    return request(app)
-      .get("/api/reviews")
-      .then(({ body }) => {
-        const reviews = body;
-        expect(reviews).toBeSortedBy("created_at", { descending: true });
-      });
-  });
-  test("should return reviews sorted to given parameters", () => {
-    return request(app)
-      .get("/api/reviews?sort_by=owner&order_by=ASC")
-      .expect(200)
-      .then(({ body }) => {
-        const reviews = body;
-        expect(reviews).toBeSortedBy("owner", { ascending: true });
-      });
-  });
-  test("should return an error when given a sort_by parameter that does not exist", () => {
-    return request(app)
-      .get("/api/reviews?sort_by=owr&order_by=ASC")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toEqual("Invalid input");
-      });
-  });
-  test("should return an error when given a order_by parameter that does not exist", () => {
-    return request(app)
-      .get("/api/reviews?sort_by=owner&order_by=AFC")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toEqual("Invalid input");
-      });
-  });
-});
+describe("DELETE /api/comments/:comment_id", () => {});
