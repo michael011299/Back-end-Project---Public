@@ -10,10 +10,10 @@ exports.selectCommentsById = (reviewID) => {
     )
     .then((result) => {
       const results = result.rows;
-      if (!result) {
+      if (results.length === 0) {
         return Promise.reject({
           status: 404,
-          msg: `No user found for review_id`,
+          msg: `No user found for review_id: ${reviewID}`,
         });
       }
       return results;

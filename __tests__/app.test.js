@@ -296,11 +296,20 @@ describe(" GET /api/reviews/:review_id/comments", () => {
   });
   test("status:404, responds with an error message when passed a bad user ID", () => {
     return request(app)
-      .get("/api/reviews/235/comments")
+      .get("/api/reviews/999/comments")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
-        expect(result.msg).toBe("Invalid input");
+        const response = body;
+        console.log(response);
+        expect(body.msg).toBe("No user found for review_id: 999");
+      });
+  });
+  test("status:400, responds with an error message when passed a bad user ID", () => {
+    return request(app)
+      .get("/api/reviews/notanid/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
