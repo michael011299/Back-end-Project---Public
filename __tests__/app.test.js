@@ -424,7 +424,12 @@ describe("POST /api/reviews/:review_id/comments", () => {
 
 describe("DELETE /api/comments/:comment_id", () => {
   test("should delete a comment with the given comment id ", () => {
-    return request(app).delete("/api/comments/3").expect(204);
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then((results) => {
+        expect(results.noContent).toEqual(true);
+      });
   });
   test("status:404, responds with an error message when passed an invalid comment_id", () => {
     return request(app)

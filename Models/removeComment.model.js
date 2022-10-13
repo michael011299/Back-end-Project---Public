@@ -6,6 +6,12 @@ exports.removeComment = (commentID) => {
       commentID,
     ])
     .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "Bad request",
+        });
+      }
       return result.rows;
     });
 };
