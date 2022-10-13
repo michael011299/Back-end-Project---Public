@@ -270,3 +270,19 @@ describe("GET /api/reviews", () => {
       });
   });
 });
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("status:201, responds with comment newly added to the database", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "a frustrating but enjoybale game thus far",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toEqual({});
+      });
+  });
+});
