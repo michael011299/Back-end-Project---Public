@@ -326,7 +326,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(body.comments).toEqual({
           comment_id: 7,
           body: "a frustrating but enjoybale game thus far",
-          review_id: expect.any(Number),
+          review_id: 3,
           author: "bainesface",
           votes: 0,
           created_at: expect.any(String),
