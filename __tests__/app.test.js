@@ -439,4 +439,12 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
+  test("status:404, responds with an error message when passed a  valid comment_id that does not exist", () => {
+    return request(app)
+      .delete("/api/comments/99")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+      });
+  });
 });
