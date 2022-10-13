@@ -270,20 +270,6 @@ describe("GET /api/reviews", () => {
   });
 });
 
-<<<<<<< HEAD
-describe("POST /api/reviews/:review_id/comments", () => {
-  test("status:201, responds with comment newly added to the database", () => {
-    const newComment = {
-      username: "bainesface",
-      body: "a frustrating but enjoybale game thus far",
-    };
-    return request(app)
-      .post("/api/reviews/3/comments")
-      .send(newComment)
-      .expect(201)
-      .then(({ body }) => {
-        expect(body.comment).toEqual({});
-=======
 describe(" GET /api/reviews/:review_id/comments", () => {
   test("should return an array of comments for the given review_id", () => {
     return request(app)
@@ -322,7 +308,22 @@ describe(" GET /api/reviews/:review_id/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
->>>>>>> f8ad11bca688ca7864074ca4eba81dabde49a74c
+      });
+  });
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("status:201, responds with comment newly added to the database", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "a frustrating but enjoybale game thus far",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toEqual({});
       });
   });
 });
