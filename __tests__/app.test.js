@@ -333,17 +333,53 @@ describe("POST /api/reviews/:review_id/comments", () => {
         });
       });
   });
-  test("status:404, responds with an error message when passed a bad user ID", () => {
+
+  test("status:404, responds with an error message when passed a valid user ID that does not exist", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "a frustrating but enjoybale game thus far",
+    };
     return request(app)
-      .get("/api/reviews/999/comments")
+      .post("/api/reviews/999/comments")
+      .send(newComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("No user found for review_id: 999");
+        expect(body.msg).toBe("Invalid input");
       });
   });
-  test("status:400, responds with an error message when passed a bad user ID", () => {
+  test("status:400, responds with an error message when passed an invalid user ID", () => {
+    const newComment = {
+      username: "bainesface",
+      body: "a frustrating but enjoybale game thus far",
+    };
     return request(app)
-      .get("/api/reviews/notanid/comments")
+      .post("/api/reviews/notanid/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+  test("status:404, when given a username that does not exist", () => {
+    const newComment = {
+      username: "veinface",
+      body: "a frustrating but enjoybale game thus far",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+  test("status:404, when missing a required key from newComment", () => {
+    const newComment = {
+      username: "bainesface",
+    };
+    return request(app)
+      .post("/api/reviews/3/comments")
+      .send(newComment)
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
