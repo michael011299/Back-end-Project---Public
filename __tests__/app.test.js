@@ -323,7 +323,30 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(newComment)
       .expect(201)
       .then(({ body }) => {
-        expect(body.comment).toEqual({});
+        expect(body.comments).toEqual({
+          comment_id: 7,
+          body: "a frustrating but enjoybale game thus far",
+          review_id: expect.any(Number),
+          author: "bainesface",
+          votes: 0,
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("status:404, responds with an error message when passed a bad user ID", () => {
+    return request(app)
+      .get("/api/reviews/999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user found for review_id: 999");
+      });
+  });
+  test("status:400, responds with an error message when passed a bad user ID", () => {
+    return request(app)
+      .get("/api/reviews/notanid/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });

@@ -1,10 +1,11 @@
 const { sendComments } = require("../Models/sendComments.model");
 
 exports.postComments = (req, res, next) => {
-  console.log(req.body);
-  sendComments()
-    .then((comments) => {
-      res.status(201).send(comments);
+  const body = req.body.body;
+  const author = req.body.username;
+  sendComments(author, body)
+    .then((result) => {
+      res.status(201).send({ comments: result });
     })
     .catch(next);
 };

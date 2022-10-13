@@ -1,7 +1,19 @@
 const db = require("../db/connection");
 
-exports.sendComments = () => {
-  return db.query(`INPUT INTO comments `).then((result) => {
-    return result.rows;
-  });
+exports.sendComments = (author, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (body, author, review_id) VALUES ($1, $2, $3) RETURNING *;`,
+      [body, author, 3]
+    )
+    .then((result) => {
+      const results = result.rows[0];
+      if (!results) {
+        return Promise.reject({
+          status: 404,
+          msg: `No user found for review_id: ${reviewID}`,
+        });
+      }
+      return results;
+    });
 };
