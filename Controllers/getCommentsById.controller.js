@@ -4,7 +4,7 @@ exports.getCommentsById = (req, res, next) => {
   const reviewID = req.params.review_id;
   selectCommentsById(reviewID)
     .then((result) => {
-      res.status(200).send(result);
+      res.status(200).send({ comments: result });
     })
     .catch(next);
 };

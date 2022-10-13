@@ -276,7 +276,7 @@ describe(" GET /api/reviews/:review_id/comments", () => {
       .get("/api/reviews/2/comments")
       .expect(200)
       .then(({ body }) => {
-        const comments = body;
+        const comments = body.comments;
         expect(comments).toBeInstanceOf(Array);
         expect(comments).toHaveLength(3);
         expect(comments).toBeSortedBy("created_at", { descending: true });
@@ -299,8 +299,6 @@ describe(" GET /api/reviews/:review_id/comments", () => {
       .get("/api/reviews/999/comments")
       .expect(404)
       .then(({ body }) => {
-        const response = body;
-        console.log(response);
         expect(body.msg).toBe("No user found for review_id: 999");
       });
   });
