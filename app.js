@@ -17,10 +17,10 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
+app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/users", getUsers);
 app.patch("/api/reviews/:review_id", patchReviews);
-app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsById);
 app.post("/api/reviews/:review_id/comments", postComments);
 app.delete("/api/comments/:comment_id", deleteComment);

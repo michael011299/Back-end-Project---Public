@@ -379,7 +379,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid input");
+        expect(body.msg).toBe("Bad request");
       });
   });
   test("status:400, responds with an error message when passed an invalid user ID", () => {
@@ -405,7 +405,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid input");
+        expect(body.msg).toBe("Bad request");
       });
   });
   test("status:404, when missing a required key from newComment", () => {
@@ -434,12 +434,4 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-  // test("status:404, responds with an error message when passed an valid comment_id that does not exist", () => {
-  //   return request(app)
-  //     .delete("/api/comments/999")
-  //     .expect(404)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe("Invalid input");
-  //     });
-  // });
 });
