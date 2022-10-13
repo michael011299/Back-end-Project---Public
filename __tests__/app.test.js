@@ -422,4 +422,24 @@ describe("POST /api/reviews/:review_id/comments", () => {
   });
 });
 
-describe("DELETE /api/comments/:comment_id", () => {});
+describe("DELETE /api/comments/:comment_id", () => {
+  test("should delete a comment with the given comment id ", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("status:404, responds with an error message when passed an invalid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/notanid")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+  // test("status:404, responds with an error message when passed an valid comment_id that does not exist", () => {
+  //   return request(app)
+  //     .delete("/api/comments/999")
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe("Invalid input");
+  //     });
+  // });
+});
