@@ -17,14 +17,16 @@ jobs:
         uses: actions/checkout@v3
       - name: setup node
         uses: actions/setup-node@v3
+      - name: setup postgresql
+        uses: harmon758/postgresql-action@v1
         with:
-          postgresql db: PGDATABASE=nc_games_test
+          postgresql db: test_db
           postgresql user: Tests_Daily
           postgresql password: password!
       - name: install dependencies
         run: npm i
       - name: run tests
-        run: PGDATABASE=nc_games_test PGUSER=Tests_Daily PGPASSWORD=password! npm t
+        run: PGDATABASE=test_db PGUSER=Tests_Daily PGPASSWORD=password! npm t
 
   deploy:
     runs-on: ubuntu-latest
@@ -33,7 +35,7 @@ jobs:
       - name: Clone and checkout our repo
         uses: actions/checkout@v3
       - name: deploy to heroku
-        uses: AkhileshNS/heroku-deploy@v3.12.12
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
