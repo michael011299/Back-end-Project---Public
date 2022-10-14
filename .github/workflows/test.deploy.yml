@@ -18,7 +18,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          postgresql db: test_db
+          postgresql db: PGDATABASE=nc_games_test
           postgresql user: Tests_Daily
           postgresql password: password!
       - name: install dependencies

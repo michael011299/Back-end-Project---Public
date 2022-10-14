@@ -15,7 +15,6 @@ const {
 
 const app = express();
 app.use(express.json());
-//testing deploy
 
 app.get("/api");
 app.get("/api/categories", getCategories);
