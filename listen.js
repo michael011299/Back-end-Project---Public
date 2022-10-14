@@ -1,5 +1,5 @@
 const app = require("./app");
-const connection = require("./db/connection");
+const ENV = require("./db/connection");
 
 const { PORT = 9090 } = ENV;
 
