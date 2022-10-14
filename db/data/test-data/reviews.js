@@ -139,7 +139,6 @@ module.exports = [
     created_at: new Date(1611311824839),
     votes: 100,
   },
-  //testing error was below
   {
     title: "Settlers of Catan: Don't Settle For Less",
     designer: "Klaus Teuber",

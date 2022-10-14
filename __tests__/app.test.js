@@ -138,7 +138,7 @@ describe("PATCH api/reviews/:review_id", () => {
           review_body:
             "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
           category: "social deduction",
-          created_at: "1970-01-10T03:08:38.400Z",
+          created_at: "1970-01-10T02:08:38.400Z",
           votes: 6,
         });
       });
