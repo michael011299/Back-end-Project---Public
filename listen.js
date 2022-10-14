@@ -1,8 +1,5 @@
 const app = require("./app");
-const ENV = require("./db/connection");
 
-const { PORT = 9090 } = ENV;
+const { PORT = 9090 } = process.env;
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}...`);
-});
+app.listen(PORT, () => console.log(`Listening on ${PORT}...`));
