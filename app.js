@@ -7,15 +7,16 @@ const { patchReviews } = require("./Controllers/patchReview.controller");
 const { getCommentsById } = require("./Controllers/getCommentsById.controller");
 const { postComments } = require("./Controllers/postComments.controller");
 const { deleteComment } = require("./Controllers/deleteComment.controller");
-
 const {
   handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
 } = require("./error-handling/errors");
+
 const app = express();
 app.use(express.json());
 
+app.get("/api");
 app.get("/api/categories", getCategories);
 app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id", getReviewById);

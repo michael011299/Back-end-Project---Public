@@ -61,7 +61,10 @@
   },
   "PATCH /api/reviews/:review_id": {
     "description": "updates a review based on the given id and value",
-    "queries": [{ "inc_vote": 1 }],
+    "queries": [
+      { "inc_vote": 1 },
+      "must be given an object with a valid key and value"
+    ],
     "exampleResponse": {
       "review_id": 1,
       "title": "Agricola",
@@ -76,7 +79,7 @@
   },
   "GET /api/reviews/:review_id/comments": {
     "description": "returns an array of the comments from a given id",
-    "queries": ["sort_by", "order_by"],
+    "queries": ["sort_by", "order_by", "accepts any valid review id"],
     "exampleResponse": {
       "comments": [
         {
@@ -91,7 +94,10 @@
   },
   "POST /api/reviews/:review_id/comments": {
     "description": "posts a given comment to a provided review_id",
-    "queries": ["sort_by", "order_by"],
+    "queries": [
+      "must be given an object with a username and body",
+      "accepts any valid review id"
+    ],
     "exampleResponse": {
       "comment_id": 7,
       "body": "a frustrating but enjoybale game thus far",
@@ -103,7 +109,7 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "deletes specific comments by coment_id",
-    "queries": [""],
+    "queries": ["accepts any valid comment id"],
     "exampleResponse": {}
   }
 }
