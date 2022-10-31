@@ -6,7 +6,7 @@ exports.getReviews = (req, res, next) => {
   const sort_by = req.query.sort_by;
   selectReviews(queryCategory, sort_by, order_by)
     .then((results) => {
-      res.status(200).send(results);
+      res.status(200).send({ reviews: results });
     })
     .catch(next);
 };
