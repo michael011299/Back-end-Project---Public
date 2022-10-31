@@ -18,7 +18,7 @@ const {
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+//installed cors
 app.get("/api", getAppInfo);
 app.get("/api/categories", getCategories);
 app.get("/api/reviews", getReviews);
