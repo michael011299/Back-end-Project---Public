@@ -16,8 +16,8 @@ const {
 } = require("./error-handling/errors");
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 app.get("/api", getAppInfo);
 app.get("/api/categories", getCategories);
