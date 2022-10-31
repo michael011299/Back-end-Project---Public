@@ -1,4 +1,4 @@
-const cors = require("cors");
+// const cors = require("cors");
 const express = require("express");
 const { getCategories } = require("./Controllers/getCategories.controller");
 const { getReviewById } = require("./Controllers/getReviewById.controller");
@@ -16,10 +16,9 @@ const {
 } = require("./error-handling/errors");
 
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
-//installed cors
 app.get("/api", getAppInfo);
 app.get("/api/categories", getCategories);
 app.get("/api/reviews", getReviews);
