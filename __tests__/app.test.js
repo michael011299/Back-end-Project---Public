@@ -45,8 +45,8 @@ describe("GET /api/reviews/:reviewid", () => {
     return request(app)
       .get(`/api/reviews/1`)
       .expect(200)
-      .then((body) => {
-        expect(body.body).toEqual({
+      .then(({ body }) => {
+        expect(body.review).toEqual({
           review_id: expect.any(Number),
           title: expect.any(String),
           category: expect.any(String),
@@ -171,7 +171,7 @@ describe("GET /api/reviews/:review_id (comment_count)", () => {
       .get("/api/reviews/3")
       .expect(200)
       .then((res) => {
-        expect(res.body.comment_count).toEqual("3");
+        expect(res.body.review.comment_count).toEqual("3");
       });
   });
   test("status:400, responds with an error message when passed a bad user ID", () => {
@@ -191,10 +191,12 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const reviews = body;
-        expect(reviews).toBeInstanceOf(Array);
-        expect(reviews).toHaveLength(13);
-        expect(reviews).toBeSortedBy("created_at", { descending: true });
-        reviews.forEach((review) => {
+        expect(reviews.reviews).toBeInstanceOf(Array);
+        expect(reviews.reviews).toHaveLength(13);
+        expect(reviews.reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
+        reviews.reviews.forEach((review) => {
           expect(review).toEqual(
             expect.objectContaining({
               review_id: expect.any(Number),
@@ -218,7 +220,7 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const reviews = body;
-        expect(reviews[0]).toEqual({
+        expect(reviews.reviews[0]).toEqual({
           title: "Jenga",
           designer: "Leslie Scott",
           owner: "philippaclaire9",
@@ -239,9 +241,9 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const reviews = body;
-        expect(reviews).toBeInstanceOf(Array);
-        expect(reviews).toHaveLength(11);
-        reviews.forEach((review) => {
+        expect(reviews.reviews).toBeInstanceOf(Array);
+        expect(reviews.reviews).toHaveLength(11);
+        reviews.reviews.forEach((review) => {
           expect(review.category).toEqual("social deduction");
           expect(review).toEqual(
             expect.objectContaining({
@@ -274,7 +276,9 @@ describe("GET /api/reviews", () => {
         .get("/api/reviews")
         .then(({ body }) => {
           const reviews = body;
-          expect(reviews).toBeSortedBy("created_at", { descending: true });
+          expect(reviews.reviews).toBeSortedBy("created_at", {
+            descending: true,
+          });
         });
     });
     test("should return reviews sorted to given parameters", () => {
@@ -283,7 +287,7 @@ describe("GET /api/reviews", () => {
         .expect(200)
         .then(({ body }) => {
           const reviews = body;
-          expect(reviews).toBeSortedBy("owner", { ascending: true });
+          expect(reviews.reviews).toBeSortedBy("owner", { ascending: true });
         });
     });
     test("should return an error when given a sort_by parameter that does not exist", () => {
