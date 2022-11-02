@@ -20,6 +20,7 @@ exports.selectReviews = (
     `votes`,
     `review_body`,
     `review_img_url`,
+    `comment_count`,
   ];
 
   const allowedOrderValues = [`ASC`, `DESC`];
