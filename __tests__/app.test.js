@@ -333,15 +333,15 @@ describe(" GET /api/reviews/:review_id/comments", () => {
         });
       });
   });
-  test("status:404, responds with an error message when passed a bad user ID", () => {
+  test("status:404, responds with an error message when passed a bad review ID", () => {
     return request(app)
       .get("/api/reviews/999/comments")
-      .expect(404)
+      .expect(200)
       .then(({ body }) => {
-        expect(body.msg).toBe("No user found for review_id: 999");
+        expect(body.comments).toEqual([]);
       });
   });
-  test("status:400, responds with an error message when passed a bad user ID", () => {
+  test("status:400, responds with an error message when passed a bad review ID", () => {
     return request(app)
       .get("/api/reviews/notanid/comments")
       .expect(400)
@@ -448,6 +448,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete("/api/comments/99")
       .expect(404)
       .then(({ body }) => {
+        console.log({ body });
         expect(body.msg).toBe("Not found");
       });
   });
